@@ -11,4 +11,6 @@ The project is built on MPLS, with OSPF as the underlying protocol. VPNs with VR
 # MPLS LDP configured with Loopback0as the router ID.
 # Control plane configurations, including line console and vty settings.
 Please note that the provided summary is a concise overview of the configuration."
-![image](https://github.com/avichay904/MPLS-VPNs-with-VRF/assets/110627766/f2500009-78f3-44c4-b7dc-56d5f8b3edc8)
+
+
+![image](https://github.com/avichay904/MPLS-VPNs-with-VRF/assets/110627766/98fc05f4-2a72-4538-899d-64e8ada1ecc5)
