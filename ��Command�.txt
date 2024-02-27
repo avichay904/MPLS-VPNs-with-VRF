@@ -1,0 +1,103 @@
+פקודות רלוונטיות להוספת סניף 
+:
+
+
+יש להקים VRF של
+
+PE
+
+הקמה של VRF
+
+ip vrf centrex
+ rd 100:14  // משתנה בין PE
+ route-target export 100:10
+ route-target import 100:10 
+
+ address-family ipv4 vrf centrex
+  no synchronization
+  redistribute connected
+  redistribute static
+exit-address-family
+
+
+שיוך שכן בBGP
+
+neighbor (WAN) remote-as (AS-NUMBER)
+  neighbor (WAN) activate
+
+שיוך ממשק לVRF 
+interface FastEthernet1/1
+ ip vrf forwarding GUY
+ ip address 10.10.20.1 255.255.255.252
+ duplex auto
+ speed auto
+
+********************************
+
+
+CE
+
+P2P
+
+interface FastEthernet0/0
+ ip address (IP+SUB)
+ duplex half
+
+HSRP
+
+interface FastEthernet1/1
+ no ip redirects
+ ip virtual-reassembly
+ duplex auto
+ speed auto
+ standby (NUMBER) ip(ip logic)
+ standby (NUMBER) priority (priority number)
+ standby (NUMBER) preempt
+
+BGP:
+
+router bgp (num as)
+ bgp log-neighbor-changes
+ neighbor (wan) remote-as (num as)
+ address-family ipv4
+  no synchronization
+  network (lan)
+  network (lan)
+  redistribute connected
+  neighbor (wan) activate
+  no auto-summary
+ exit-address-family
+
+
+access-list
+
+ip access-list standard (name)
+ permit/deny (lan+wildcard)
+
+שליטה על הניתובים שאלמד/שילמדו אותי
+הname הוא לפי הACCESS-LST הרלוונטי
+
+neighbor (WAN) distribute-list (name) in/out
+
+קילקול הניתוב (לצורך שליטה על אופן העברת התעבורה)
+
+יצירת ACL
+ip access-list standard LAN
+ permit 172.16.2.0 0.0.0.255
+יצירת rout-map
+(חשוב לוודא שיוצרים 2 רולים -אחת ללאן שמקלקלים ואחד ללאן שלא)
+
+route-map (name) permit 10
+ match ip address (name) 
+ set as-path prepend (as number)
+
+route-map (same name) permit 20
+ match ip address (name)
+ 
+לאחר מכן נבמע את הפקודה ברמת הBGP
+
+  neighbor (WAN) route-map (NAME) out
+
+
+
+
